@@ -1,0 +1,7 @@
+export interface ICreateUser {
+  name: string;
+  email: string;
+  password: string;
+  role: "user" | "admin" | "author";
+  status:'active'| 'blocked'
+}
