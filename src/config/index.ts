@@ -8,5 +8,6 @@ dotenv.config({
 export default {
   prot: process.env.PORT,
   database_url: process.env.MONGODB_URL,
-  sercrt: process.env.SECRECT,
+  jwt_secrect: process.env.JWT_SECRECT!,
+  jwt_access_expire_in: process.env.JWT_ACCESS_EXPRIE_IN as string,
 };

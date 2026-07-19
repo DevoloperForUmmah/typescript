@@ -1,7 +1,8 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { authServices } from "./auth.services.js";
+import { sendeResponse } from "../../utils/sendResponse.js";
 
-const userLogin = async (req: Request, res: Response) => {
+const userLogin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const payload = req.body;
     const result = await authServices.userLogin(req.body);
@@ -20,17 +21,20 @@ const userLogin = async (req: Request, res: Response) => {
       maxAge: 1000 * 60 * 60 * 24 * 15,
     });
 
-    res.status(201).json({
-      success: true,
-      message: "user login successfully",
-      data: result,
-    });
+    // res.status(201).json({
+    //   success: true,
+    //   message: "user login successfully",
+    //   data: result,
+    // });
+
+    sendeResponse(res,{
+      success:true,
+      statusCode:200,
+      message:'user login success',
+      data:result
+    })
   } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-      error: error,
-    });
+    next(error);
   }
 };
 

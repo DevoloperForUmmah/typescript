@@ -1,7 +1,9 @@
 import bcrypt from "bcryptjs";
 import { userModel } from "../user/user.model.js";
 import type { ILoginUser } from "./auth.interface.js";
-import jwt, { type JwtPayload } from "jsonwebtoken";
+import jwt, { type JwtPayload, type SignOptions } from "jsonwebtoken";
+import { utils } from "../../utils/jwt.js";
+import config from "../../config/index.js";
 
 const userLogin = async (payload: ILoginUser) => {
   const { email, password } = payload;
@@ -25,9 +27,15 @@ const userLogin = async (payload: ILoginUser) => {
     status: user.status,
   };
 
-  const accessToken = jwt.sign(jwtPayload, "sifsnfns", {
-    expiresIn: 1000 * 60 * 60 * 24 * 1,
-  });
+  // const accessToken = jwt.sign(jwtPayload, "sifsnfns", {
+  //   expiresIn: 1000 * 60 * 60 * 24 * 1,
+  // });
+
+  const accessToken = utils.createToken(
+    jwtPayload,
+    config.jwt_secrect,
+    config.jwt_access_expire_in as SignOptions,
+  );
 
   const refreshToken = jwt.sign(jwtPayload, "osfhsfh", {
     expiresIn: 1000 * 60 * 60 * 24 * 15,
